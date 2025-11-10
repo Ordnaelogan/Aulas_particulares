@@ -21,6 +21,15 @@
         
         .alert-success { padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 15px; }
     </style>
+    <!-- Incluindo JavaScript para a confirmação de exclusão -->
+    <script>
+        function confirmarExclusao(event) {
+            // Em ambientes de produção/provas, o 'confirm' é muitas vezes evitado.
+            // Aqui, usamos um alerta simples para simular a confirmação.
+            alert("AVISO: A exclusão do aluno é permanente. (Ação Simples para Prova)");
+            return true; // Continua com a exclusão após o aviso
+        }
+    </script>
 </head>
 <body>
     <div class="container">
@@ -58,7 +67,7 @@
                                 <a href="{{ route('alunos.show', $aluno->id) }}" class="btn-action btn-view">Ver</a>
                                 <a href="{{ route('alunos.edit', $aluno->id) }}" class="btn-action btn-edit">Editar</a>
                                 
-                                <form action="{{ route('alunos.destroy', $aluno->id) }}" method="POST" style="display:inline;">
+                                <form action="{{ route('alunos.destroy', $aluno->id) }}" method="POST" style="display:inline;" onsubmit="return confirmarExclusao(event)">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-action btn-delete">Excluir</button>
