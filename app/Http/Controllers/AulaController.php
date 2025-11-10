@@ -3,63 +3,36 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aula;
+use App\Models\Aluno;
+use App\Models\Disciplina;
 use Illuminate\Http\Request;
 
 class AulaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    // ... métodos index, create, store (que estão OK) ...
+
     public function index()
     {
-        //
+        // Certifica-se de que o método with(['aluno', 'disciplina']) está aqui para a LISTA
+        $aulas = Aula::with(['aluno', 'disciplina'])->get(); 
+        return view('aulas.index', compact('aulas'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    // ... create() e store() omitidos, assumindo que já estão implementados ...
 
     /**
      * Display the specified resource.
+     * (CORREÇÃO AQUI: Garante que os relacionamentos estão carregados)
      */
     public function show(Aula $aula)
     {
-        //
+        // Usa o load() para garantir que o Aluno e a Disciplina
+        // estão carregados ANTES de serem passados para a View.
+        $aula->load(['aluno', 'disciplina']);
+
+        // Se o erro não for do load(), ele estará na sua View.
+        return view('aulas.show', compact('aula'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Aula $aula)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Aula $aula)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Aula $aula)
-    {
-        //
-    }
+    // ... edit(), update(), destroy() omitidos
 }

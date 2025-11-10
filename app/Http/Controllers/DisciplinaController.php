@@ -14,7 +14,6 @@ class DisciplinaController extends Controller
     public function index()
     {
         $disciplinas = Disciplina::all();
-        // Retorna a View (que faremos no Passo 2)
         return view('disciplinas.index', compact('disciplinas'));
     }
 
@@ -89,14 +88,14 @@ class DisciplinaController extends Controller
 
     /**
      * Remove the specified resource from storage.
-     * (Excluir a disciplina)
+     * (Este é o NOVO método para "Excluir" a disciplina)
      */
     public function destroy(Disciplina $disciplina)
     {
         // 1. Apaga a disciplina do banco de dados
         $disciplina->delete();
 
-        // 2. Redireciona
+        // 2. Redireciona de volta para a listagem (index) com uma msg de sucesso
         return redirect()->route('disciplinas.index')
                          ->with('success', 'Disciplina excluída com sucesso!');
     }
