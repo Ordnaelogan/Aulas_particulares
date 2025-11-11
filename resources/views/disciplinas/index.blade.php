@@ -21,6 +21,11 @@
         .btn-delete { background-color: #dc3545; color: white; border: none; cursor: pointer; }
         
         .alert-success { padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 15px; }
+
+        /* Estilo para links rápidos de navegação */
+        .nav-links { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;}
+        .nav-links a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        .nav-links a.active { font-weight: bold; color: #007bff; }
     </style>
     <script>
         function formatarMoeda(valor) {
@@ -30,12 +35,18 @@
 </head>
 <body>
     <div class="container">
+
+        <!-- INÍCIO DA NAVEGAÇÃO GLOBAL -->
+        <div class="nav-links">
+            <a href="{{ route('alunos.index') }}">ALUNOS</a>
+            <a href="{{ route('disciplinas.index') }}" class="active">DISCIPLINAS</a>
+            <a href="{{ route('aulas.index') }}">AULAS</a>
+        </div>
+        <!-- FIM DA NAVEGAÇÃO GLOBAL -->
+
         <h1>Lista de Disciplinas</h1>
 
-        <!-- Link para o formulário de cadastro -->
         <a href="{{ route('disciplinas.create') }}" class="btn-add">Adicionar Nova Disciplina</a>
-        <a href="{{ route('alunos.index') }}" style="margin-left: 10px; text-decoration: none; color: #007bff;">Voltar para Alunos</a>
-
 
         @if (session('success'))
             <div class="alert-success">
@@ -67,7 +78,7 @@
                                 {{ $disciplina->valor_hora }}
                             </td>
                             <td>
-                                <!-- Ações (ainda não funcionam, mas os links estão prontos) -->
+                                <!-- Ações (já implementadas) -->
                                 <a href="{{ route('disciplinas.show', $disciplina->id) }}" class="btn-action btn-view">Ver</a>
                                 <a href="{{ route('disciplinas.edit', $disciplina->id) }}" class="btn-action btn-edit">Editar</a>
                                 

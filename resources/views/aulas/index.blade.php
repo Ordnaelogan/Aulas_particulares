@@ -23,29 +23,33 @@
         .alert-success { padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 15px; }
 
         /* Estilo para links rápidos de navegação */
-        .nav-links { margin-bottom: 20px; }
+        .nav-links { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;}
         .nav-links a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        .nav-links a.active { font-weight: bold; color: #007bff; }
     </style>
     <script>
-        function formatarData(data) {
-            const options = { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' };
-            return new Date(data).toLocaleString('pt-BR', options);
-        }
         function formatarMoeda(valor) {
             return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+        function formatarData(data) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return new Date(data).toLocaleDateString('pt-BR', options);
         }
     </script>
 </head>
 <body>
     <div class="container">
+        
+        <!-- INÍCIO DA NAVEGAÇÃO GLOBAL -->
+        <div class="nav-links">
+            <a href="{{ route('alunos.index') }}">ALUNOS</a>
+            <a href="{{ route('disciplinas.index') }}">DISCIPLINAS</a>
+            <a href="{{ route('aulas.index') }}" class="active">AULAS</a>
+        </div>
+        <!-- FIM DA NAVEGAÇÃO GLOBAL -->
+        
         <h1>Aulas Agendadas</h1>
 
-        <!-- Navegação Rápida -->
-        <div class="nav-links">
-            <a href="{{ route('alunos.index') }}">Gerenciar Alunos</a>
-            <a href="{{ route('disciplinas.index') }}">Gerenciar Disciplinas</a>
-        </div>
-        
         <a href="{{ route('aulas.create') }}" class="btn-add">Agendar Nova Aula</a>
 
         @if (session('success'))
@@ -73,22 +77,18 @@
                     @foreach ($aulas as $aula)
                         <tr>
                             <td>{{ $aula->id }}</td>
-                            <!-- Aqui usamos os relacionamentos Model (com o with) -->
                             <td>{{ $aula->aluno->nome }}</td>
                             <td>{{ $aula->disciplina->nome }}</td>
                             
-                            <!-- Formata a data com o JavaScript -->
                             <td class="data-raw" data-data="{{ $aula->data }}">
                                 {{ $aula->data }} 
                             </td>
-                            <td>{{ $aula->duracao_horas }}</td>
+                            <td class="duracao-raw">{{ $aula->duracao_horas }}</td>
                             
-                            <!-- Formata a moeda com o JavaScript -->
                             <td class="valor-total-raw" data-valor="{{ $aula->valor_total }}">
                                 {{ $aula->valor_total }}
                             </td>
                             <td>
-                                <!-- Ações (ainda não funcionam) -->
                                 <a href="{{ route('aulas.show', $aula->id) }}" class="btn-action btn-view">Ver</a>
                                 <a href="{{ route('aulas.edit', $aula->id) }}" class="btn-action btn-edit">Editar</a>
                                 
@@ -118,6 +118,11 @@
             document.querySelectorAll('.data-raw').forEach(function(element) {
                 const data = new Date(element.getAttribute('data-data'));
                 element.textContent = data.toLocaleDateString('pt-BR');
+            });
+
+            // Adiciona 'h' nas horas para melhor leitura
+             document.querySelectorAll('.duracao-raw').forEach(function(element) {
+                element.textContent += 'h';
             });
         });
     </script>

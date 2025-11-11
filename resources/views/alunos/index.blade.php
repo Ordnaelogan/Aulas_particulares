@@ -20,19 +20,29 @@
         .btn-delete { background-color: #dc3545; color: white; border: none; cursor: pointer; }
         
         .alert-success { padding: 10px; background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; border-radius: 4px; margin-bottom: 15px; }
+
+        /* Estilo para links rápidos de navegação */
+        .nav-links { margin-bottom: 20px; border-bottom: 1px solid #ccc; padding-bottom: 10px;}
+        .nav-links a { margin-right: 15px; text-decoration: none; color: #007bff; }
+        .nav-links a.active { font-weight: bold; color: #007bff; }
     </style>
-    <!-- Incluindo JavaScript para a confirmação de exclusão -->
     <script>
         function confirmarExclusao(event) {
-            // Em ambientes de produção/provas, o 'confirm' é muitas vezes evitado.
-            // Aqui, usamos um alerta simples para simular a confirmação.
-            alert("AVISO: A exclusão do aluno é permanente. (Ação Simples para Prova)");
-            return true; // Continua com a exclusão após o aviso
+            return confirm("AVISO: A exclusão do aluno é permanente. Tem certeza?");
         }
     </script>
 </head>
 <body>
     <div class="container">
+        
+        <!-- INÍCIO DA NAVEGAÇÃO GLOBAL -->
+        <div class="nav-links">
+            <a href="{{ route('alunos.index') }}" class="active">ALUNOS</a>
+            <a href="{{ route('disciplinas.index') }}">DISCIPLINAS</a>
+            <a href="{{ route('aulas.index') }}">AULAS</a>
+        </div>
+        <!-- FIM DA NAVEGAÇÃO GLOBAL -->
+        
         <h1>Lista de Alunos</h1>
 
         <a href="{{ route('alunos.create') }}" class="btn-add">Adicionar Novo Aluno</a>
