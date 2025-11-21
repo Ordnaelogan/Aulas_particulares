@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Alunos - Dark Mode Dourado</title>
+    <title>Lista de Alunos - Dark Mode Final</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
@@ -13,8 +13,8 @@
             --bg-page: #1f2937; /* Fundo Escuro */
             --bg-card: #374151; /* Janela Central Escura */
             --text-light: #f3f4f6;
-            --accent-primary: #f59e0b; /* AMARELO DOURADO */
-            --accent-secondary: #facc15; /* Amarelo Secundário (VER/EDITAR) */
+            --accent-primary: #f59e0b; /* AMARELO DOURADO (ADICIONAR) */
+            --accent-secondary: #2dd4bf; /* CIANO/MINT (VER/EDITAR) */
             --accent-danger: #dc2626; /* Vermelho (Excluir) */
             --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         }
@@ -48,9 +48,23 @@
         .nav-link.active { color: var(--accent-primary); border-bottom: 3px solid var(--accent-primary); padding-bottom: 10px; }
         
         /* Botões */
-        .btn-action { padding: 7px 12px; border-radius: 6px; font-size: 0.85rem; text-decoration: none; margin-left: 5px; font-weight: bold; border: none; }
-        .btn-create { background-color: var(--accent-primary); color: var(--bg-card); } 
-        .btn-info, .btn-primary { background-color: var(--accent-secondary); color: var(--bg-card); } 
+        .btn-action { 
+            padding: 7px 12px; 
+            border-radius: 6px; 
+            font-size: 0.85rem; 
+            text-decoration: none; 
+            margin-left: 5px; 
+            font-weight: bold; 
+            border: none;
+            /* Detalhe de Interação: Efeito Hover */
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            opacity: 0.85; 
+            transform: translateY(-1px); 
+        }
+        .btn-create { background-color: var(--accent-primary); color: var(--bg-card); } /* Dourado */
+        .btn-info, .btn-primary { background-color: var(--accent-secondary); color: var(--bg-card); } /* Ciano/Mint */
         .btn-danger { background-color: var(--accent-danger); color: white; }
     </style>
 </head>
@@ -78,6 +92,8 @@
                     </tr>
                 </thead>
                 <tbody>
+                    
+                    {{-- Seu loop @foreach deve funcionar aqui, usando a variável $alunos --}}
                     @isset($alunos)
                         @foreach ($alunos as $aluno)
                         <tr>
@@ -97,6 +113,7 @@
                     @else
                         <tr><td colspan="3" style="text-align: center; color: #9ca3af;">Nenhum aluno encontrado.</td></tr>
                     @endisset
+                    
                 </tbody>
             </table>
         </div>
