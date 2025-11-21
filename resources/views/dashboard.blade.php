@@ -137,7 +137,7 @@
             text-align: center;
             background-color: rgba(0, 0, 0, 0.6);
             color: #9ca3af;
-            font-size: 1rem;
+            font-size: 1.6rem;
             position: sticky;
             bottom: 0;
             left: 0;
