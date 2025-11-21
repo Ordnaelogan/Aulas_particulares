@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
+        /* Variáveis de Dark Mode */
         :root {
             --bg-page: #1f2937; /* Fundo Escuro */
             --bg-card: #374151; /* Janela Central Escura */
@@ -42,6 +43,13 @@
         .table-custom th, .table-custom td { padding: 12px; border-bottom: 1px solid #4b5563; text-align: left; }
         .table-custom th { background-color: var(--bg-card); font-weight: 600; color: var(--accent-primary); }
         .table-custom td { color: var(--text-light); }
+        .table-custom tr:hover td { background-color: #4b556333; } /* Hover sutil */
+
+        /* CORREÇÃO APLICADA AQUI: Garante que o conteúdo da célula de ações não quebre a linha e tenha largura mínima */
+        .table-custom .td-actions {
+            white-space: nowrap;
+            width: 200px; /* Garante que a coluna tenha espaço para os 3 botões */
+        }
         
         /* Navegação */
         .nav-link { text-decoration: none; color: #9ca3af; font-weight: bold; margin-right: 20px; }
@@ -64,17 +72,47 @@
             transform: translateY(-1px); 
         }
         .btn-create { background-color: var(--accent-primary); color: var(--bg-card); } /* Dourado */
-        .btn-info, .btn-primary { background-color: var(--accent-secondary); color: var(--bg-card); } /* Ciano/Mint */
-        .btn-danger { background-color: var(--accent-danger); color: white; }
+        .btn-info { background-color: var(--accent-secondary); color: var(--bg-card); } /* Ciano/Mint (Ver) */
+        .btn-primary { background-color: #3b82f6; color: white; } /* Azul (Editar) */
+        .btn-danger { background-color: var(--accent-danger); color: white; } /* Vermelho (Excluir) */
+
+        /* Alerta de Sessão */
+        .alert-success, .alert-danger { 
+            position: fixed; 
+            top: 10px; 
+            right: 10px; 
+            z-index: 1000;
+            padding: 10px 15px;
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+            font-weight: bold;
+        }
+        .alert-success { background-color: #10b981; color: white; }
+        .alert-danger { background-color: var(--accent-danger); color: white; }
     </style>
 </head>
 <body>
+    
+    <!-- Alertas de Sessão -->
+    @if(session('success'))
+        <div class="alert alert-success" role="alert">
+            {{ session('success') }}
+        </div>
+    @endif
+    @if(session('error'))
+        <div class="alert alert-danger" role="alert">
+            {{ session('error') }}
+        </div>
+    @endif
+    
     <div class="container-box">
         
+        <!-- Navegação Primária -->
         <div style="margin-bottom: 20px; padding-bottom: 10px;">
-            <a href="#" class="nav-link active">Alunos</a>
-            <a href="#" class="nav-link">Disciplinas</a>
-            <a href="#" class="nav-link">Aulas</a>
+            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
+            <a href="{{ route('alunos.index') }}" class="nav-link active">Alunos</a>
+            <a href="{{ route('disciplinas.index') }}" class="nav-link">Disciplinas</a>
+            <a href="{{ route('aulas.index') }}" class="nav-link">Aulas</a>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
@@ -88,24 +126,27 @@
                     <tr>
                         <th>Nome Completo</th>
                         <th>Email</th>
-                        <th style="width: 25%; text-align: center;">Ações</th>
+                        <!-- Garantindo a largura para os botões -->
+                        <th style="width: 200px; text-align: center;">Ações</th> 
                     </tr>
                 </thead>
                 <tbody>
                     
-                    {{-- Seu loop @foreach deve funcionar aqui, usando a variável $alunos --}}
                     @isset($alunos)
                         @foreach ($alunos as $aluno)
                         <tr>
                             <td>{{ $aluno->nome }}</td>
                             <td>{{ $aluno->email }}</td>
-                            <td style="text-align: center;">
+                            <!-- APLICAÇÃO DA CLASSE DE CORREÇÃO -->
+                            <td style="text-align: center;" class="td-actions"> 
                                 <a href="{{ route('alunos.show', $aluno->id) }}" class="btn-action btn-info"><i class="fas fa-eye"></i> Ver</a>
                                 <a href="{{ route('alunos.edit', $aluno->id) }}" class="btn-action btn-primary"><i class="fas fa-edit"></i> Editar</a>
-                                <form action="{{ route('alunos.destroy', $aluno->id) }}" method="POST" style="display: inline-block;">
+                                
+                                {{-- Formulário de Exclusão --}}
+                                <form action="{{ route('alunos.destroy', $aluno->id) }}" method="POST" style="display: inline-block;" onsubmit="return confirmDelete(event, '{{ $aluno->nome }}')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn-action btn-danger" onclick="return confirm('Excluir?');"><i class="fas fa-trash-alt"></i> Excluir</button>
+                                    <button type="submit" class="btn-action btn-danger"><i class="fas fa-trash-alt"></i> Excluir</button>
                                 </form>
                             </td>
                         </tr>
@@ -118,6 +159,36 @@
             </table>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {{-- Função JavaScript para Confirmação de Exclusão e Alertas --}}
+    <script>
+        function confirmDelete(event, nomeAluno) {
+            // Usa o confirm nativo, mas envolvido em uma função para melhor controle
+            if (!window.confirm('Tem certeza que deseja excluir o aluno: "' + nomeAluno + '"? Esta ação é irreversível e pode afetar aulas relacionadas.')) {
+                event.preventDefault(); // Impede o envio do formulário se o usuário cancelar
+                return false;
+            }
+            return true;
+        }
+        
+        // Função para esconder o alerta após alguns segundos
+        document.addEventListener('DOMContentLoaded', (event) => {
+            const successAlert = document.querySelector('.alert-success');
+            const errorAlert = document.querySelector('.alert-danger');
+
+            if (successAlert) {
+                setTimeout(() => {
+                    successAlert.remove();
+                }, 4000); // 4 segundos
+            }
+            if (errorAlert) {
+                setTimeout(() => {
+                    errorAlert.remove();
+                }, 4000); // 4 segundos
+            }
+        });
+    </script>
 </body>
 </html>
