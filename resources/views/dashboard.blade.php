@@ -27,7 +27,7 @@
             color: var(--text-light);
             
             /* Imagem de Fundo (Troque 'SUA_URL_DA_IMAGEM' pelo caminho real) */
-            background-image: url('https://picsum.photos/1920/1080?grayscale');
+            background-image: url();
             background-size: cover;
             background-position: center;
             
