@@ -29,9 +29,11 @@
         </div>
 
         <div class="flex items-center justify-end mt-6">
-            <x-primary-button class="w-full justify-center">
+            <button type="submit" 
+                    class="w-full justify-center text-sm font-bold rounded-md shadow-md hover:opacity-90 transition duration-150 ease-in-out"
+                    style="background-color: var(--accent-primary); color: var(--bg-card); border: none; padding: 10px 0;">
                 {{ __('Acessar') }}
-            </x-primary-button>
+            </button>
         </div>
 
         <div class="flex flex-row items-center justify-center mt-4 gap-4">
