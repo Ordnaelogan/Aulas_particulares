@@ -4,24 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Adicionar Nova Disciplina</title>
-    <!-- Estilo CSS autônomo -->
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
+        /* Variáveis de Dark Mode (do seu index.blade.php) */
+        :root {
+            --bg-page: #1f2937; /* Fundo Escuro */
+            --bg-card: #374151; /* Janela Central Escura */
+            --text-light: #f3f4f6;
+            --accent-primary: #f59e0b; /* AMARELO DOURADO (ADICIONAR) */
+            --accent-secondary: #2dd4bf; /* CIANO/MINT */
+            --accent-danger: #dc2626; /* Vermelho */
+            --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            background-color: var(--bg-page); 
+            padding: 40px;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        .container-box { 
+            max-width: 600px; 
+            margin: auto;
+            background: var(--bg-card); 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: var(--shadow); 
+        }
+        h1 { 
+            color: var(--text-light); 
+            font-size: 1.8rem; 
+            margin-bottom: 20px; 
+            border-bottom: 2px solid #4b5563;
+            padding-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        /* Formulário */
         .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; font-weight: bold; }
-        .form-group input { width: 95%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; }
-        .btn-submit { padding: 10px 15px; background-color: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .link-back { display: block; margin-top: 20px; text-decoration: none; color: #007bff; }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.95rem; }
+        .form-group input[type="text"], 
+        .form-group input[type="number"],
+        .form-group input[type="email"] { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #4b5563; 
+            border-radius: 6px; 
+            box-sizing: border-box;
+            background-color: #4b5563; /* Cor de fundo do input */
+            color: var(--text-light);
+        }
+        
+        /* Botão de Salvar */
+        .btn-submit { 
+            padding: 10px 20px; 
+            background-color: var(--accent-primary); /* Cor Dourada/Primária */
+            color: var(--bg-card); 
+            border: none; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        .btn-submit:hover { opacity: 0.9; }
+
+        /* Links */
+        .link-back { 
+            display: inline-block; 
+            margin-top: 20px; 
+            text-decoration: none; 
+            color: #9ca3af; 
+            font-weight: 600;
+        }
+        .link-back:hover { color: var(--accent-secondary); }
+
         /* Estilo para erros de validação */
-        .alert-danger { padding: 10px; background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; border-radius: 4px; margin-bottom: 15px; }
+        .alert-danger { 
+            padding: 15px; 
+            background-color: var(--accent-danger); 
+            color: white; 
+            border-radius: 6px; 
+            margin-bottom: 20px; 
+            box-shadow: var(--shadow);
+        }
         .alert-danger ul { margin: 0; padding-left: 20px; }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Adicionar Nova Disciplina</h1>
+    <div class="container-box">
+        
+        <a href="{{ route('disciplinas.index') }}" class="link-back"><i class="fas fa-arrow-left me-2"></i> Voltar para a Lista de Disciplinas</a>
+
+        <h1>ADICIONAR NOVA DISCIPLINA</h1>
 
         <!-- Se houver erros de validação, mostra-os aqui em cima -->
         @if ($errors->any())
@@ -51,14 +130,11 @@
 
             <div class="form-group">
                 <label for="valor_hora">Valor por Hora (R$):</label>
-                <!-- O input number é bom para números, mas para dinheiro, o tipo 'text' com validação backend é mais flexível -->
                 <input type="text" id="valor_hora" name="valor_hora" value="{{ old('valor_hora') }}" required>
             </div>
 
-            <button type="submit" class="btn-submit">Salvar Disciplina</button>
+            <button type="submit" class="btn-submit"><i class="fas fa-save me-2"></i> SALVAR DISCIPLINA</button>
         </form>
-
-        <a href="{{ route('disciplinas.index') }}" class="link-back">Voltar para a Lista</a>
     </div>
 </body>
 </html>

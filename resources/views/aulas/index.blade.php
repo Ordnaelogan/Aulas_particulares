@@ -3,14 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lista de Aulas Agendadas - Dark Mode Final</title>
+    <title>Lista de Aulas - Cards</title>
 
-    <!-- CDNs (Fontes e Ícones) -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-        /* Variáveis de Dark Mode (Consistente com as outras Views) */
+        /* Variáveis de Dark Mode (NÃO ALTERADAS) */
         :root {
             --bg-page: #1f2937; /* Fundo Escuro */
             --bg-card: #374151; /* Janela Central Escura */
@@ -19,17 +18,19 @@
             --accent-secondary: #2dd4bf; /* CIANO/MINT (VER/EDITAR) */
             --accent-danger: #dc2626; /* Vermelho (Excluir) */
             --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+            --font-display: 'Roboto', sans-serif; 
         }
         
         body { 
-            font-family: Arial, sans-serif; 
+            font-family: var(--font-display); 
             margin: 0; 
             background-color: var(--bg-page); 
             padding: 40px;
             color: var(--text-light);
+            line-height: 1.6;
         }
         .container-box { 
-            max-width: 1200px; /* Maior para caber mais colunas */
+            max-width: 1000px; 
             margin: auto;
             background: var(--bg-card); 
             padding: 30px; 
@@ -37,32 +38,64 @@
             box-shadow: var(--shadow); 
             width: 100%;
         }
-        h1 { color: var(--text-light); font-size: 1.8rem; margin-bottom: 20px; }
-        
-        /* Tabela */
-        .table-custom { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        .table-custom th, .table-custom td { padding: 12px; border-bottom: 1px solid #4b5563; text-align: left; }
-        .table-custom th { background-color: var(--bg-card); font-weight: 600; color: var(--accent-primary); }
-        .table-custom td { color: var(--text-light); }
-        .table-custom tr:hover td { background-color: #4b556333; }
-
-        /* CORREÇÃO APLICADA: Garante que o conteúdo da célula de ações não quebre a linha */
-        .table-custom .td-actions {
-            white-space: nowrap;
-            width: 200px; /* Ajuda a garantir espaço na coluna */
+        h1 { 
+            color: var(--text-light); 
+            font-size: 2.2rem; 
+            margin-bottom: 25px; 
+            border-bottom: 2px solid #4b5563;
+            padding-bottom: 10px;
+            font-weight: 700;
         }
-
+        
         /* Navegação */
         .nav-link { text-decoration: none; color: #9ca3af; font-weight: bold; margin-right: 20px; }
-        .nav-link.active { color: var(--accent-primary); border-bottom: 3px solid var(--accent-primary); padding-bottom: 10px; }
+        
+        /* Estilo dos Cards */
+        .aulas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .aula-card {
+            background-color: #4b5563; 
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid var(--accent-secondary); /* Usei a cor Ciano/Mint para aulas */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 180px;
+            transition: transform 0.2s;
+        }
+        .aula-card:hover {
+            transform: translateY(-3px); 
+        }
+
+        .aula-titulo {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 5px;
+        }
+        .aula-info {
+            color: #9ca3af;
+            font-size: 0.95rem;
+            margin-bottom: 5px;
+        }
         
         /* Botões */
+        .card-actions {
+            display: flex;
+            gap: 5px;
+            margin-top: 15px;
+        }
         .btn-action { 
-            padding: 7px 12px; 
+            padding: 7px 10px; 
             border-radius: 6px; 
-            font-size: 0.85rem; 
+            font-size: 0.8rem; 
             text-decoration: none; 
-            margin-left: 5px; 
             font-weight: bold; 
             border: none;
             transition: all 0.2s ease;
@@ -71,13 +104,13 @@
             opacity: 0.85; 
             transform: translateY(-1px); 
         }
-        .btn-create { background-color: var(--accent-primary); color: var(--bg-card); } /* Dourado */
-        .btn-view { background-color: var(--accent-secondary); color: var(--bg-card); } /* Ciano/Mint */
-        .btn-edit { background-color: #3b82f6; color: white; } /* Azul */
-        .btn-delete { background-color: var(--accent-danger); color: white; } /* Vermelho */
+        .btn-create { background-color: var(--accent-primary); color: var(--bg-card); }
+        .btn-info { background-color: var(--accent-secondary); color: var(--bg-card); }
+        .btn-primary { background-color: #3b82f6; color: white; }
+        .btn-danger { background-color: var(--accent-danger); color: white; }
 
-        /* Alerta de Sessão */
-        .alert-success, .alert-danger { 
+        /* Estilo Alerta */
+        .alert-fixed { 
             position: fixed; 
             top: 10px; 
             right: 10px; 
@@ -90,131 +123,82 @@
         .alert-success { background-color: #10b981; color: white; }
         .alert-danger { background-color: var(--accent-danger); color: white; }
     </style>
-    
 </head>
 <body>
     
-    <!-- Alertas de Sessão -->
-    @if (session('success'))
-        <div class="alert-success" role="alert">
+    {{-- Alertas de Sessão --}}
+    @if(session('success'))
+        <div class="alert-fixed alert-success" role="alert">
             {{ session('success') }}
         </div>
     @endif
-    @if (session('error'))
-        <div class="alert-danger" role="alert">
+    @if(session('error'))
+        <div class="alert-fixed alert-danger" role="alert">
             {{ session('error') }}
         </div>
     @endif
-
+    
     <div class="container-box">
         
-        <!-- Navegação Primária -->
+        {{-- Navegação Primária: Apenas Dashboard --}}
         <div style="margin-bottom: 20px; padding-bottom: 10px;">
-            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-            <a href="{{ route('alunos.index') }}" class="nav-link">Alunos</a>
-            <a href="{{ route('disciplinas.index') }}" class="nav-link">Disciplinas</a>
-            <a href="{{ route('aulas.index') }}" class="nav-link active">Aulas</a>
-        </div>
-        
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
-            <h1>AULAS AGENDADAS</h1>
-            <a href="{{ route('aulas.create') }}" class="btn-action btn-create"><i class="fas fa-plus me-2"></i> AGENDAR NOVA AULA</a>
+            <a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-arrow-left"></i> VOLTAR AO DASHBOARD</a>
         </div>
 
-        @if($aulas->isEmpty())
-            <p style="text-align: center; color: #9ca3af;">Nenhuma aula agendada encontrada.</p>
-        @else
-            <div class="table-responsive">
-                <table class="table-custom">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Aluno</th>
-                            <th>Disciplina</th>
-                            <th>Data</th>
-                            <th>Duração (h)</th>
-                            <th>Valor Total</th>
-                            <th style="width: 15%; text-align: center;">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($aulas as $aula)
-                            <tr>
-                                <td>{{ $aula->id }}</td>
-                                <!-- Acesso aos Relacionamentos (Aluno e Disciplina) - Correto devido ao eager loading no Controller -->
-                                <td>{{ $aula->aluno->nome }}</td> 
-                                <td>{{ $aula->disciplina->nome }}</td>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+            <h1>GESTÃO DE AULAS</h1>
+            <a href="{{ route('aulas.create') }}" class="btn-action btn-create"><i class="fas fa-video me-2"></i> NOVA AULA</a>
+        </div>
+
+        @isset($aulas)
+            @if ($aulas->isEmpty())
+                <p style="text-align: center; color: #9ca3af; margin-top: 50px;">Nenhuma aula agendada encontrada.</p>
+            @else
+                <div class="aulas-grid">
+                    
+                    {{-- Loop para exibir os Cards --}}
+                    @foreach ($aulas as $aula)
+                        <div class="aula-card">
+                            <div>
+                                <div class="aula-titulo">{{ $aula->titulo }}</div>
+                                <div class="aula-info"><i class="fas fa-calendar-alt"></i> Data: {{ $aula->data ? (new DateTime($aula->data))->format('d/m/Y') : 'N/A' }}</div>
+                                <div class="aula-info"><i class="fas fa-clock"></i> Horário: {{ $aula->horario ?? 'N/A' }}</div>
+                                {{-- Assumindo que pode haver um link para a disciplina --}}
+                                @if ($aula->disciplina)
+                                    <div class="aula-info"><i class="fas fa-book"></i> Disciplina: {{ $aula->disciplina->nome }}</div>
+                                @endif
+                            </div>
+
+                            <div class="card-actions">
+                                {{-- Botões CRUD --}}
+                                <a href="{{ route('aulas.show', $aula->id) }}" class="btn-action btn-info"><i class="fas fa-eye"></i> Ver</a>
+                                <a href="{{ route('aulas.edit', $aula->id) }}" class="btn-action btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                 
-                                <td class="data-raw" data-data="{{ $aula->data }}">
-                                    <!-- O conteúdo aqui será substituído por JS com a data formatada -->
-                                </td>
-                                <td class="duracao-raw">{{ $aula->duracao_horas }}</td>
-                                
-                                <td class="valor-total-raw" data-valor="{{ $aula->valor_total }}">
-                                    <!-- O conteúdo aqui será substituído por JS com a moeda formatada -->
-                                </td>
-                                
-                                <!-- APLICAÇÃO DA CLASSE DE CORREÇÃO -->
-                                <td style="text-align: center;" class="td-actions">
-                                    <a href="{{ route('aulas.show', $aula->id) }}" class="btn-action btn-view"><i class="fas fa-eye"></i> Ver</a>
-                                    <a href="{{ route('aulas.edit', $aula->id) }}" class="btn-action btn-edit"><i class="fas fa-edit"></i> Editar</a>
-                                    
-                                    <form action="{{ route('aulas.destroy', $aula->id) }}" method="POST" style="display:inline;" onsubmit="return confirmDelete(event)">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-action btn-delete"><i class="fas fa-trash-alt"></i> Excluir</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        @endif
+                                <form action="{{ route('aulas.destroy', $aula->id) }}" method="POST" style="display: inline-block; margin-left: auto;" onsubmit="return confirmDelete(event, '{{ $aula->titulo }}')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-action btn-danger"><i class="fas fa-trash-alt"></i> Excluir</button>
+                                </form>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        @endisset
     </div>
 
-    <!-- Scripts -->
+    {{-- Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
-        // Função utilitária para formatação de moeda
-        function formatarMoeda(valor) {
-             return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-        }
-        
-        // Função de confirmação de exclusão
-        function confirmDelete(event) {
-            if (!window.confirm('Tem certeza que deseja excluir esta aula?')) {
+        function confirmDelete(event, nomeAula) {
+            if (!window.confirm('Tem certeza que deseja excluir a aula: "' + nomeAula + '"? Esta ação é irreversível.')) {
                 event.preventDefault();
                 return false;
             }
             return true;
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // 1. Formata o valor total
-            document.querySelectorAll('.valor-total-raw').forEach(function(element) {
-                const valor = element.getAttribute('data-valor');
-                element.textContent = formatarMoeda(valor);
-            });
-
-            // 2. Formata a data (DD/MM/AAAA)
-            document.querySelectorAll('.data-raw').forEach(function(element) {
-                const data = new Date(element.getAttribute('data-data'));
-                // Garante que a data está correta antes de formatar
-                if (!isNaN(data)) {
-                    element.textContent = data.toLocaleDateString('pt-BR', { year: 'numeric', month: '2-digit', day: '2-digit' });
-                } else {
-                    element.textContent = 'Data Inválida';
-                }
-            });
-
-            // 3. Adiciona 'h' à duração (ex: 1.5 -> 1.5h)
-            document.querySelectorAll('.duracao-raw').forEach(function(element) {
-                element.textContent += 'h';
-            });
-            
-            // 4. Esconde alertas após 4 segundos
+        
+        document.addEventListener('DOMContentLoaded', (event) => {
             const successAlert = document.querySelector('.alert-success');
             const errorAlert = document.querySelector('.alert-danger');
 
