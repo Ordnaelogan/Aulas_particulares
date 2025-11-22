@@ -1,4 +1,4 @@
-{{-- resources/views/layouts/original.blade.php - CÓDIGO CORRIGIDO COM TRANSPARÊNCIA CONDICIONAL --}}
+{{-- resources/views/layouts/original.blade.php - CÓDIGO CORRIGIDO (SEM LINKS REDUNDANTES) --}}
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -45,11 +45,11 @@
             bottom: 0;
             z-index: -2; 
         }
-        /* ATENÇÃO: Remoção do background fixo da classe container-box no CSS */
+        /* ATENÇÃO: Estilo da Caixa Principal (Card) */
         .container-box { 
             max-width: 950px; 
             margin: auto;
-            /* background: var(--bg-card); <--- REMOVIDO AQUI! */
+            /* background é definido inline para transparência condicional */
             padding: 30px; 
             border-radius: 12px; 
             box-shadow: var(--shadow); 
@@ -86,7 +86,7 @@
             align-items: center;
         }
         .app-footer img {
-            height: 80px; /* Seu ajuste de 80px */
+            height: 30px; /* Reduzido de 80px para 30px para um footer elegante */
             margin-right: 15px;
         }
     </style>
@@ -97,23 +97,28 @@
         
         @if (Auth::check())
         @php
-            // Usa o helper global \Request para verificar a rota e aplicar o estilo.
+            // Verifica se a rota ATUAL é o dashboard
             $is_dashboard = \Request::routeIs('dashboard');
-            // Dashboard (transparente): var(--bg-card) com 70% de transparência
-            // Outras páginas (CRUD): var(--bg-card) opaco
+            
+            // Dashboard (transparente): 70% de transparência
+            // Outras páginas (CRUD): Opaco
             $box_style = $is_dashboard ? 'background: rgba(55, 65, 81, 0.7);' : 'background: var(--bg-card);';
         @endphp
 
         <div class="container-box" style="{{ $box_style }}"> 
             
-            {{-- Navegação Principal com Links e Logout (Sempre incluída) --}}
+            {{-- Início da Área de Navegação Superior (Só Logged-in) --}}
             <div style="margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #4b5563;" class="clearfix">
-                <a href="{{ route('dashboard') }}" class="nav-link @if($is_dashboard) active @endif" style="float: left;">Dashboard</a>
-                <a href="{{ route('alunos.index') }}" class="nav-link @if(\Request::routeIs('alunos.*')) active @endif" style="float: left;">Alunos</a>
-                <a href="{{ route('disciplinas.index') }}" class="nav-link @if(\Request::routeIs('disciplinas.*')) active @endif" style="float: left;">Disciplinas</a>
-                <a href="{{ route('aulas.index') }}" class="nav-link @if(\Request::routeIs('aulas.*')) active @endif" style="float: left;">Aulas</a>
                 
-                {{-- Logout do Breeze Adaptado --}}
+                {{-- LINKS CRUD: SÓ APARECEM SE NÃO FOR O DASHBOARD (para evitar redundância com os Cards) --}}
+                @if (!$is_dashboard)
+                    <a href="{{ route('dashboard') }}" class="nav-link" style="float: left;">Dashboard</a>
+                    <a href="{{ route('alunos.index') }}" class="nav-link @if(\Request::routeIs('alunos.*')) active @endif" style="float: left;">Alunos</a>
+                    <a href="{{ route('disciplinas.index') }}" class="nav-link @if(\Request::routeIs('disciplinas.*')) active @endif" style="float: left;">Disciplinas</a>
+                    <a href="{{ route('aulas.index') }}" class="nav-link @if(\Request::routeIs('aulas.*')) active @endif" style="float: left;">Aulas</a>
+                @endif
+                
+                {{-- Logout (Sempre Visível) --}}
                 <form method="POST" action="{{ route('logout') }}" style="display: inline; float: right;">
                     @csrf
                     <button type="submit" class="btn-action btn-danger">
@@ -132,16 +137,16 @@
 
     <footer class="app-footer">
         <div style="display: flex; align-items: center;">
-            <img src="{{ asset('imagens/logo2.png') }}" alt="Logo">
+            <img src="{{ asset('imagens/logo2.png') }}" alt="Logo" style="height: 70px;">
             <div>
                 <div style="font-weight: bold;">Software Aulas Particulares</div>
                 <div style="font-size: 0.8rem;">Gerencie seu conhecimento.</div>
             </div>
         </div>
         <div style="font-size: 0.8rem;">
-            Software Aulas Particulares Versão 1.0
+            Software Aulas Particulares | Versão 1.0
             <br>
-            {{ date('l, d \d\e F \d\e Y \à\s H:i', strtotime('-3 hours')) }} 
+            {{ date('d/m/Y \à\s H:i') }}
         </div>
     </footer>
 

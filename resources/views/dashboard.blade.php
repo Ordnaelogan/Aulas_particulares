@@ -1,4 +1,4 @@
-{{-- resources/views/dashboard.blade.php - CÓDIGO CORRIGIDO (SEM CAIXA REDUNDANTE) --}}
+{{-- resources/views/dashboard.blade.php --}}
 
 @extends('layouts.original')
 
@@ -10,11 +10,12 @@
 
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
         <h1 style="color: var(--text-light); font-size: 1.8rem; margin-bottom: 0;">AULAS PARTICULARES PREMIUM</h1>
-        <a href="{{ route('alunos.create') }}" class="btn-action btn-create"><i class="fas fa-plus me-2"></i> NOVO REGISTRO</a>
+        
+        {{-- BOTÃO REMOVIDO: A função do Dashboard é ACESSAR MÓDULOS, não registrar --}}
     </div>
 
     <p style="color: var(--text-light); margin-bottom: 40px; font-size: 1.1rem;">
-        Gerencie seus alunos, disciplinas e agendamentos de forma inteligente e eficiente, com a tecnologia a seu Favor.
+        Gerencie seus alunos, disciplinas e agendamentos de forma inteligente e eficiente, com a tecnologia a seu favor.
     </p>
 
     {{-- Cards de Acesso com estilo DOURADO/AMARELO e ícones --}}
