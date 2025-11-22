@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-        /* Variáveis de Dark Mode (do seu index.blade.php) */
+        /* Variáveis de Dark Mode */
         :root {
             --bg-page: #1f2937; /* Fundo Escuro */
             --bg-card: #374151; /* Janela Central Escura */
@@ -27,6 +27,8 @@
             padding: 40px;
             color: var(--text-light);
             line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
         }
         .container-box { 
             max-width: 600px; 
@@ -35,14 +37,28 @@
             padding: 30px; 
             border-radius: 12px; 
             box-shadow: var(--shadow); 
+            margin-bottom: 100px;
         }
-        h1 { 
-            color: var(--text-light); 
-            font-size: 1.8rem; 
-            margin-bottom: 20px; 
+        
+        /* Estilo para o cabeçalho com logo */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
             border-bottom: 2px solid #4b5563;
-            padding-bottom: 10px;
+        }
+        .header-logo img {
+            height: 40px; 
+            width: auto;
+        }
+        .header-logo h1 {
+            margin: 0;
+            padding: 0;
+            border: none;
+            font-size: 1.8rem;
             font-weight: 700;
+            margin-left: 15px;
         }
         
         /* Formulário e Selects */
@@ -55,14 +71,22 @@
             border: 1px solid #4b5563; 
             border-radius: 6px; 
             box-sizing: border-box;
-            background-color: #4b5563; /* Cor de fundo do input */
+            background-color: #4b5563; /* Cor de fundo do input/select */
+            color: var(--text-light);
+            -webkit-appearance: none; /* Remove estilo nativo do Chrome/Safari */
+            -moz-appearance: none; /* Remove estilo nativo do Firefox */
+            appearance: none; /* Remove estilo nativo */
+        }
+        /* Cor dos textos dentro do select/option */
+        .form-group select option {
+            background-color: #4b5563;
             color: var(--text-light);
         }
         
         /* Botão de Salvar */
         .btn-submit { 
             padding: 10px 20px; 
-            background-color: var(--accent-primary); /* Cor Dourada/Primária */
+            background-color: var(--accent-primary); 
             color: var(--bg-card); 
             border: none; 
             border-radius: 6px; 
@@ -92,6 +116,33 @@
             box-shadow: var(--shadow);
         }
         .alert-danger ul { margin: 0; padding-left: 20px; }
+
+        /* Rodapé Acadêmico */
+        .footer-academico {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #27303d;
+            color: #9ca3af;
+            padding: 10px 0;
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid #4b5563;
+        }
+        .footer-academico p { margin: 0; line-height: 1.4; }
+        .footer-academico strong { color: var(--accent-secondary); }
+        
+        /* Estilo para as Logos no Rodapé */
+        .footer-academico .laravel-logo,
+        .footer-academico .csi-logo {
+            height: 18px; 
+            vertical-align: middle; 
+            margin-left: 10px;
+        }
+        .footer-academico .laravel-logo {
+             filter: invert(100%); 
+        }
     </style>
 </head>
 <body>
@@ -99,9 +150,13 @@
         
         <a href="{{ route('aulas.index') }}" class="link-back"><i class="fas fa-arrow-left me-2"></i> Voltar para a Lista de Aulas</a>
 
-        <h1>AGENDAR NOVA AULA</h1>
+        <!-- Cabeçalho com LOGO DO PROJETO (logo2.png) -->
+        <div class="header-logo">
+            <img src="{{ asset('imagens/logo2.png') }}" alt="Logo Aulas Particulares">
+            <h1>AGENDAR NOVA AULA</h1>
+        </div>
 
-        <!-- Se houver erros de validação, mostra-os aqui em cima -->
+        <!-- Alertas de Validação -->
         @if ($errors->any())
             <div class="alert-danger">
                 <strong>Opa!</strong> Algo deu errado:
@@ -154,5 +209,17 @@
             <button type="submit" class="btn-submit"><i class="fas fa-calendar-plus me-2"></i> AGENDAR AULA</button>
         </form>
     </div>
+
+    <!-- RODAPÉ ACADÊMICO FINAL (Sua Estrutura Detalhada) -->
+    <footer class="footer-academico">
+        <p>Desenvolvido por: <strong>Leandro Vasconcelos</strong> e <strong>Cristina Amaral</strong></p>
+        <p>Disciplina: Programação Orientada á Objeto | Profª: Luciene Soares</p>
+        <p>Curso Técnico de Informática | Colégio Santo Inácio | Rede Jesuíta de Educação
+            <img src="{{ asset('imagens/csi.png') }}" alt="Colégio Santo Inácio" class="csi-logo">
+        </p>
+        <p>Projeto Acadêmico | Sistema de Aulas Particulares | MVC Laravel 
+            <img src="{{ asset('imagens/laravel.png') }}" alt="Laravel Framework" class="laravel-logo">
+        </p>
+    </footer>
 </body>
 </html>

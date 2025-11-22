@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-        /* Variáveis de Dark Mode (Não Alteradas) */
+        /* Variáveis de Dark Mode (NÃO ALTERADAS) */
         :root {
             --bg-page: #1f2937; /* Fundo Escuro */
             --bg-card: #374151; /* Janela Central Escura */
@@ -18,7 +18,7 @@
             --accent-secondary: #2dd4bf; /* CIANO/MINT (VER/EDITAR) */
             --accent-danger: #dc2626; /* Vermelho (Excluir) */
             --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
-            --font-display: 'Roboto', sans-serif; /* Fonte de destaque */
+            --font-display: 'Roboto', sans-serif; 
         }
         
         body { 
@@ -37,10 +37,11 @@
             border-radius: 12px; 
             box-shadow: var(--shadow); 
             width: 100%;
+            margin-bottom: 30px; /* Espaço antes do footer */
         }
         h1 { 
             color: var(--text-light); 
-            font-size: 2.2rem; /* Fonte maior para o título */
+            font-size: 2.2rem; 
             margin-bottom: 25px; 
             border-bottom: 2px solid #4b5563;
             padding-bottom: 10px;
@@ -51,78 +52,65 @@
         .nav-link { text-decoration: none; color: #9ca3af; font-weight: bold; margin-right: 20px; }
         .nav-link.active { color: var(--accent-primary); border-bottom: 3px solid var(--accent-primary); padding-bottom: 10px; }
         
-        /* Estilo dos Cards (O Design Único) */
+        /* Estilo dos Cards */
         .alunos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 300px de largura mínima por card */
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
             gap: 20px;
             margin-top: 20px;
         }
         .aluno-card {
-            background-color: #4b5563; /* Fundo do card ligeiramente mais claro */
+            background-color: #4b5563; 
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            border-left: 5px solid var(--accent-primary); /* Linha de destaque dourada */
+            border-left: 5px solid var(--accent-primary); 
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             min-height: 180px;
             transition: transform 0.2s;
         }
-        .aluno-card:hover {
-            transform: translateY(-3px); /* Leve elevação ao passar o mouse */
-        }
+        .aluno-card:hover { transform: translateY(-3px); }
 
-        .aluno-nome {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 5px;
-        }
-        .aluno-email {
-            color: #9ca3af;
-            font-size: 0.95rem;
-            margin-bottom: 15px;
-        }
+        .aluno-nome { font-size: 1.4rem; font-weight: 700; color: var(--text-light); margin-bottom: 5px; }
+        .aluno-email { color: #9ca3af; font-size: 0.95rem; margin-bottom: 15px; }
         
         /* Botões */
-        .card-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 10px;
-        }
+        .card-actions { display: flex; gap: 5px; margin-top: 10px; }
         .btn-action { 
-            padding: 7px 10px; 
-            border-radius: 6px; 
-            font-size: 0.8rem; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border: none;
+            padding: 7px 10px; border-radius: 6px; font-size: 0.8rem; text-decoration: none; font-weight: bold; border: none;
             transition: all 0.2s ease;
         }
-        .btn-action:hover {
-            opacity: 0.85; 
-            transform: translateY(-1px); 
-        }
+        .btn-action:hover { opacity: 0.85; transform: translateY(-1px); }
         .btn-create { background-color: var(--accent-primary); color: var(--bg-card); }
         .btn-info { background-color: var(--accent-secondary); color: var(--bg-card); }
         .btn-primary { background-color: #3b82f6; color: white; }
         .btn-danger { background-color: var(--accent-danger); color: white; }
 
         /* Estilo Alerta */
+        .alert-fixed { 
+            position: fixed; top: 10px; right: 10px; z-index: 1000; padding: 10px 15px; border-radius: 6px; box-shadow: var(--shadow); font-weight: bold;
+        }
         .alert-success { background-color: #10b981; color: white; }
         .alert-danger { background-color: var(--accent-danger); color: white; }
-        .alert-fixed { 
-            position: fixed; 
-            top: 10px; 
-            right: 10px; 
-            z-index: 1000;
-            padding: 10px 15px;
-            border-radius: 6px;
-            box-shadow: var(--shadow);
-            font-weight: bold;
+        
+        /* NOVO: Estilo para Rodapé Padrão */
+        .footer-academico-standard {
+            width: 100%;
+            background-color: #27303d; /* Um pouco mais escuro que o fundo */
+            color: #9ca3af;
+            padding: 20px 0;
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid #4b5563;
         }
+        .footer-academico-standard p { margin: 5px 0; line-height: 1.4; }
+        .footer-academico-standard strong { color: var(--accent-secondary); }
+        .footer-academico-standard .laravel-logo, .footer-academico-standard .csi-logo {
+            height: 18px; vertical-align: middle; margin-left: 10px;
+        }
+        .footer-academico-standard .laravel-logo { filter: invert(100%); }
     </style>
 </head>
 <body>
@@ -187,6 +175,18 @@
             @endif
         @endisset
     </div>
+
+    <!-- NOVO: Rodapé Acadêmico Padrão -->
+    <footer class="footer-academico-standard">
+        <p>Desenvolvido por: <strong>Leandro Vasconcelos</strong> e <strong>Cristina Amaral</strong></p>
+        <p>Disciplina: Programação Orientada á Objeto | Profª: Luciene Soares</p>
+        <p>Curso Técnico de Informática | Colégio Santo Inácio | Rede Jesuíta de Educação
+            <img src="{{ asset('imagens/csi.png') }}" alt="Colégio Santo Inácio" class="csi-logo">
+        </p>
+        <p>Projeto Acadêmico | Sistema de Aulas Particulares | MVC Laravel 
+            <img src="{{ asset('imagens/laravel.png') }}" alt="Laravel Framework" class="laravel-logo">
+        </p>
+    </footer>
 
     {{-- Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

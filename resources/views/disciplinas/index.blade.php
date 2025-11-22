@@ -37,6 +37,7 @@
             border-radius: 12px; 
             box-shadow: var(--shadow); 
             width: 100%;
+            margin-bottom: 30px;
         }
         h1 { 
             color: var(--text-light); 
@@ -69,41 +70,18 @@
             min-height: 180px;
             transition: transform 0.2s;
         }
-        .disciplina-card:hover {
-            transform: translateY(-3px); 
-        }
+        .disciplina-card:hover { transform: translateY(-3px); }
 
-        .disciplina-nome {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 5px;
-        }
-        .disciplina-info {
-            color: #9ca3af;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-        }
+        .disciplina-nome { font-size: 1.4rem; font-weight: 700; color: var(--text-light); margin-bottom: 5px; }
+        .disciplina-info { color: #9ca3af; font-size: 0.95rem; margin-bottom: 5px; }
         
         /* Botões */
-        .card-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 15px;
-        }
+        .card-actions { display: flex; gap: 5px; margin-top: 15px; }
         .btn-action { 
-            padding: 7px 10px; 
-            border-radius: 6px; 
-            font-size: 0.8rem; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border: none;
+            padding: 7px 10px; border-radius: 6px; font-size: 0.8rem; text-decoration: none; font-weight: bold; border: none;
             transition: all 0.2s ease;
         }
-        .btn-action:hover {
-            opacity: 0.85; 
-            transform: translateY(-1px); 
-        }
+        .btn-action:hover { opacity: 0.85; transform: translateY(-1px); }
         .btn-create { background-color: var(--accent-primary); color: var(--bg-card); }
         .btn-info { background-color: var(--accent-secondary); color: var(--bg-card); }
         .btn-primary { background-color: #3b82f6; color: white; }
@@ -111,17 +89,27 @@
 
         /* Estilo Alerta */
         .alert-fixed { 
-            position: fixed; 
-            top: 10px; 
-            right: 10px; 
-            z-index: 1000;
-            padding: 10px 15px;
-            border-radius: 6px;
-            box-shadow: var(--shadow);
-            font-weight: bold;
+            position: fixed; top: 10px; right: 10px; z-index: 1000; padding: 10px 15px; border-radius: 6px; box-shadow: var(--shadow); font-weight: bold;
         }
         .alert-success { background-color: #10b981; color: white; }
         .alert-danger { background-color: var(--accent-danger); color: white; }
+
+        /* NOVO: Estilo para Rodapé Padrão */
+        .footer-academico-standard {
+            width: 100%;
+            background-color: #27303d; 
+            color: #9ca3af;
+            padding: 20px 0;
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid #4b5563;
+        }
+        .footer-academico-standard p { margin: 5px 0; line-height: 1.4; }
+        .footer-academico-standard strong { color: var(--accent-secondary); }
+        .footer-academico-standard .laravel-logo, .footer-academico-standard .csi-logo {
+            height: 18px; vertical-align: middle; margin-left: 10px;
+        }
+        .footer-academico-standard .laravel-logo { filter: invert(100%); }
     </style>
 </head>
 <body>
@@ -162,7 +150,7 @@
                             <div>
                                 <div class="disciplina-nome">{{ $disciplina->nome }}</div>
                                 <div class="disciplina-info"><i class="fas fa-hourglass-half"></i> Carga Horária: {{ $disciplina->carga_horaria ?? 'N/A' }} horas</div>
-                                <div class="disciplina-info"><i class="fas fa-list-alt"></i> ID: {{ $disciplina->id }}</div>
+                                <div class="disciplina-info valor-hora-raw" data-valor="{{ $disciplina->valor_hora }}"><i class="fas fa-money-bill-wave"></i> Valor/Hora: R$ {{ $disciplina->valor_hora }}</div>
                             </div>
 
                             <div class="card-actions">
@@ -183,6 +171,18 @@
         @endisset
     </div>
 
+    <!-- NOVO: Rodapé Acadêmico Padrão -->
+    <footer class="footer-academico-standard">
+        <p>Desenvolvido por: <strong>Leandro Vasconcelos</strong> e <strong>Cristina Amaral</strong></p>
+        <p>Disciplina: Programação Orientada á Objeto | Profª: Luciene Soares</p>
+        <p>Curso Técnico de Informática | Colégio Santo Inácio | Rede Jesuíta de Educação
+            <img src="{{ asset('imagens/csi.png') }}" alt="Colégio Santo Inácio" class="csi-logo">
+        </p>
+        <p>Projeto Acadêmico | Sistema de Aulas Particulares | MVC Laravel 
+            <img src="{{ asset('imagens/laravel.png') }}" alt="Laravel Framework" class="laravel-logo">
+        </p>
+    </footer>
+
     {{-- Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -193,17 +193,17 @@
             }
             return true;
         }
+
+        function formatarMoeda(valor) {
+            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
         
         document.addEventListener('DOMContentLoaded', (event) => {
-            const successAlert = document.querySelector('.alert-success');
-            const errorAlert = document.querySelector('.alert-danger');
-
-            if (successAlert) {
-                setTimeout(() => { successAlert.remove(); }, 4000);
-            }
-            if (errorAlert) {
-                setTimeout(() => { errorAlert.remove(); }, 4000);
-            }
+            // Formata o valor da hora após o carregamento
+            document.querySelectorAll('.valor-hora-raw').forEach(function(element) {
+                const valor = element.getAttribute('data-valor');
+                element.innerHTML = '<i class="fas fa-money-bill-wave"></i> Valor/Hora: ' + formatarMoeda(valor);
+            });
         });
     </script>
 </body>

@@ -37,6 +37,7 @@
             border-radius: 12px; 
             box-shadow: var(--shadow); 
             width: 100%;
+            margin-bottom: 30px;
         }
         h1 { 
             color: var(--text-light); 
@@ -69,41 +70,18 @@
             min-height: 180px;
             transition: transform 0.2s;
         }
-        .aula-card:hover {
-            transform: translateY(-3px); 
-        }
+        .aula-card:hover { transform: translateY(-3px); }
 
-        .aula-titulo {
-            font-size: 1.4rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 5px;
-        }
-        .aula-info {
-            color: #9ca3af;
-            font-size: 0.95rem;
-            margin-bottom: 5px;
-        }
+        .aula-titulo { font-size: 1.4rem; font-weight: 700; color: var(--text-light); margin-bottom: 5px; }
+        .aula-info { color: #9ca3af; font-size: 0.95rem; margin-bottom: 5px; }
         
         /* Botões */
-        .card-actions {
-            display: flex;
-            gap: 5px;
-            margin-top: 15px;
-        }
+        .card-actions { display: flex; gap: 5px; margin-top: 15px; }
         .btn-action { 
-            padding: 7px 10px; 
-            border-radius: 6px; 
-            font-size: 0.8rem; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border: none;
+            padding: 7px 10px; border-radius: 6px; font-size: 0.8rem; text-decoration: none; font-weight: bold; border: none;
             transition: all 0.2s ease;
         }
-        .btn-action:hover {
-            opacity: 0.85; 
-            transform: translateY(-1px); 
-        }
+        .btn-action:hover { opacity: 0.85; transform: translateY(-1px); }
         .btn-create { background-color: var(--accent-primary); color: var(--bg-card); }
         .btn-info { background-color: var(--accent-secondary); color: var(--bg-card); }
         .btn-primary { background-color: #3b82f6; color: white; }
@@ -111,17 +89,27 @@
 
         /* Estilo Alerta */
         .alert-fixed { 
-            position: fixed; 
-            top: 10px; 
-            right: 10px; 
-            z-index: 1000;
-            padding: 10px 15px;
-            border-radius: 6px;
-            box-shadow: var(--shadow);
-            font-weight: bold;
+            position: fixed; top: 10px; right: 10px; z-index: 1000; padding: 10px 15px; border-radius: 6px; box-shadow: var(--shadow); font-weight: bold;
         }
         .alert-success { background-color: #10b981; color: white; }
         .alert-danger { background-color: var(--accent-danger); color: white; }
+
+        /* NOVO: Estilo para Rodapé Padrão */
+        .footer-academico-standard {
+            width: 100%;
+            background-color: #27303d; 
+            color: #9ca3af;
+            padding: 20px 0;
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid #4b5563;
+        }
+        .footer-academico-standard p { margin: 5px 0; line-height: 1.4; }
+        .footer-academico-standard strong { color: var(--accent-secondary); }
+        .footer-academico-standard .laravel-logo, .footer-academico-standard .csi-logo {
+            height: 18px; vertical-align: middle; margin-left: 10px;
+        }
+        .footer-academico-standard .laravel-logo { filter: invert(100%); }
     </style>
 </head>
 <body>
@@ -147,7 +135,7 @@
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
             <h1>GESTÃO DE AULAS</h1>
-            <a href="{{ route('aulas.create') }}" class="btn-action btn-create"><i class="fas fa-video me-2"></i> NOVA AULA</a>
+            <a href="{{ route('aulas.create') }}" class="btn-action btn-create"><i class="fas fa-calendar-plus me-2"></i> NOVA AULA</a>
         </div>
 
         @isset($aulas)
@@ -160,13 +148,13 @@
                     @foreach ($aulas as $aula)
                         <div class="aula-card">
                             <div>
-                                <div class="aula-titulo">{{ $aula->titulo }}</div>
-                                <div class="aula-info"><i class="fas fa-calendar-alt"></i> Data: {{ $aula->data ? (new DateTime($aula->data))->format('d/m/Y') : 'N/A' }}</div>
-                                <div class="aula-info"><i class="fas fa-clock"></i> Horário: {{ $aula->horario ?? 'N/A' }}</div>
-                                {{-- Assumindo que pode haver um link para a disciplina --}}
-                                @if ($aula->disciplina)
-                                    <div class="aula-info"><i class="fas fa-book"></i> Disciplina: {{ $aula->disciplina->nome }}</div>
-                                @endif
+                                <div class="aula-titulo">Aula de {{ $aula->disciplina->nome }}</div>
+                                <div class="aula-info"><i class="fas fa-user-graduate"></i> Aluno: {{ $aula->aluno->nome }}</div>
+                                
+                                <div class="aula-info data-raw" data-data="{{ $aula->data }}"><i class="fas fa-calendar-alt"></i> Data: {{ $aula->data }}</div>
+                                <div class="aula-info duracao-raw" data-duracao="{{ $aula->duracao_horas }}"><i class="fas fa-clock"></i> Duração: {{ $aula->duracao_horas }}</div>
+                                
+                                <div class="aula-info valor-total-raw" data-valor="{{ $aula->valor_total }}"><i class="fas fa-money-bill-wave"></i> Total: R$ {{ $aula->valor_total }}</div>
                             </div>
 
                             <div class="card-actions">
@@ -174,7 +162,7 @@
                                 <a href="{{ route('aulas.show', $aula->id) }}" class="btn-action btn-info"><i class="fas fa-eye"></i> Ver</a>
                                 <a href="{{ route('aulas.edit', $aula->id) }}" class="btn-action btn-primary"><i class="fas fa-edit"></i> Editar</a>
                                 
-                                <form action="{{ route('aulas.destroy', $aula->id) }}" method="POST" style="display: inline-block; margin-left: auto;" onsubmit="return confirmDelete(event, '{{ $aula->titulo }}')">
+                                <form action="{{ route('aulas.destroy', $aula->id) }}" method="POST" style="display: inline-block; margin-left: auto;" onsubmit="return confirmDelete(event, 'Aula de {{ $aula->disciplina->nome }}')">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn-action btn-danger"><i class="fas fa-trash-alt"></i> Excluir</button>
@@ -187,6 +175,18 @@
         @endisset
     </div>
 
+    <!-- NOVO: Rodapé Acadêmico Padrão -->
+    <footer class="footer-academico-standard">
+        <p>Desenvolvido por: <strong>Leandro Vasconcelos</strong> e <strong>Cristina Amaral</strong></p>
+        <p>Disciplina: Programação Orientada á Objeto | Profª: Luciene Soares</p>
+        <p>Curso Técnico de Informática | Colégio Santo Inácio | Rede Jesuíta de Educação
+            <img src="{{ asset('imagens/csi.png') }}" alt="Colégio Santo Inácio" class="csi-logo">
+        </p>
+        <p>Projeto Acadêmico | Sistema de Aulas Particulares | MVC Laravel 
+            <img src="{{ asset('imagens/laravel.png') }}" alt="Laravel Framework" class="laravel-logo">
+        </p>
+    </footer>
+
     {{-- Scripts --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -198,17 +198,36 @@
             return true;
         }
         
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const successAlert = document.querySelector('.alert-success');
-            const errorAlert = document.querySelector('.alert-danger');
+        function formatarMoeda(valor) {
+            return parseFloat(valor).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        }
+        function formatarData(data) {
+            const dateObj = new Date(data);
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return dateObj.toLocaleDateString('pt-BR', options);
+        }
 
-            if (successAlert) {
-                setTimeout(() => { successAlert.remove(); }, 4000);
-            }
-            if (errorAlert) {
-                setTimeout(() => { errorAlert.remove(); }, 4000);
-            }
+        document.addEventListener('DOMContentLoaded', (event) => {
+            // Formata valor total
+            document.querySelectorAll('.valor-total-raw').forEach(function(element) {
+                const valor = element.getAttribute('data-valor');
+                element.innerHTML = '<i class="fas fa-money-bill-wave"></i> Total: ' + formatarMoeda(valor);
+            });
+
+            // Formata a data
+            document.querySelectorAll('.data-raw').forEach(function(element) {
+                const data = element.getAttribute('data-data');
+                element.innerHTML = '<i class="fas fa-calendar-alt"></i> Data: ' + formatarData(data);
+            });
+
+            // Adiciona 'h' nas horas para melhor leitura
+             document.querySelectorAll('.duracao-raw').forEach(function(element) {
+                const duracao = element.getAttribute('data-duracao');
+                element.innerHTML = '<i class="fas fa-clock"></i> Duração: ' + duracao + 'h';
+            });
         });
     </script>
 </body>
 </html>
+
+

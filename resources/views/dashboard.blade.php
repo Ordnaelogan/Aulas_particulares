@@ -14,7 +14,7 @@
     </div>
 
     <p style="color: var(--text-light); margin-bottom: 40px; font-size: 1.1rem;">
-        Gerencie seus alunos, disciplinas e agendamentos de forma inteligente e eficiente, com a tecnologia a seu favor.
+        Gerencie seus alunos, disciplinas e agendamentos de forma inteligente e eficiente, com a tecnologia a seu Favor.
     </p>
 
     {{-- Cards de Acesso com estilo DOURADO/AMARELO e ícones --}}

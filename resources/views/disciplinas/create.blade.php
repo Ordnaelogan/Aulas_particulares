@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <style>
-        /* Variáveis de Dark Mode (do seu index.blade.php) */
+        /* Variáveis de Dark Mode */
         :root {
             --bg-page: #1f2937; /* Fundo Escuro */
             --bg-card: #374151; /* Janela Central Escura */
@@ -27,6 +27,8 @@
             padding: 40px;
             color: var(--text-light);
             line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
         }
         .container-box { 
             max-width: 600px; 
@@ -35,35 +37,45 @@
             padding: 30px; 
             border-radius: 12px; 
             box-shadow: var(--shadow); 
-        }
-        h1 { 
-            color: var(--text-light); 
-            font-size: 1.8rem; 
-            margin-bottom: 20px; 
-            border-bottom: 2px solid #4b5563;
-            padding-bottom: 10px;
-            font-weight: 700;
+            margin-bottom: 100px;
         }
         
-        /* Formulário */
+        /* Estilo para o cabeçalho com logo */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4b5563;
+        }
+        .header-logo img {
+            height: 40px; 
+            width: auto;
+        }
+        .header-logo h1 {
+            margin: 0;
+            padding: 0;
+            border: none;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-left: 15px;
+        }
+        
+        /* Formulário e Botões */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.95rem; }
-        .form-group input[type="text"], 
-        .form-group input[type="number"],
-        .form-group input[type="email"] { 
+        .form-group input, .form-group textarea { 
             width: 100%; 
             padding: 10px; 
             border: 1px solid #4b5563; 
             border-radius: 6px; 
             box-sizing: border-box;
-            background-color: #4b5563; /* Cor de fundo do input */
+            background-color: #4b5563;
             color: var(--text-light);
         }
-        
-        /* Botão de Salvar */
         .btn-submit { 
             padding: 10px 20px; 
-            background-color: var(--accent-primary); /* Cor Dourada/Primária */
+            background-color: var(--accent-primary); 
             color: var(--bg-card); 
             border: none; 
             border-radius: 6px; 
@@ -93,6 +105,34 @@
             box-shadow: var(--shadow);
         }
         .alert-danger ul { margin: 0; padding-left: 20px; }
+
+        /* Rodapé Acadêmico */
+        .footer-academico {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: #27303d;
+            color: #9ca3af;
+            padding: 10px 0;
+            font-size: 0.85rem;
+            text-align: center;
+            border-top: 1px solid #4b5563;
+        }
+        .footer-academico p { margin: 0; line-height: 1.4; }
+        .footer-academico strong { color: var(--accent-secondary); }
+        
+        /* Estilo para as Logos no Rodapé */
+        .footer-academico .laravel-logo,
+        .footer-academico .csi-logo {
+            height: 18px; 
+            vertical-align: middle; 
+            margin-left: 10px;
+        }
+        /* Corrigindo o brilho da logo do Laravel no Dark Mode */
+        .footer-academico .laravel-logo {
+             filter: invert(100%); 
+        }
     </style>
 </head>
 <body>
@@ -100,9 +140,13 @@
         
         <a href="{{ route('disciplinas.index') }}" class="link-back"><i class="fas fa-arrow-left me-2"></i> Voltar para a Lista de Disciplinas</a>
 
-        <h1>ADICIONAR NOVA DISCIPLINA</h1>
+        <!-- Cabeçalho com LOGO DO PROJETO (logo2.png) -->
+        <div class="header-logo">
+            <img src="{{ asset('imagens/logo2.png') }}" alt="Logo Aulas Particulares">
+            <h1>ADICIONAR NOVA DISCIPLINA</h1>
+        </div>
 
-        <!-- Se houver erros de validação, mostra-os aqui em cima -->
+        <!-- Alertas de Validação -->
         @if ($errors->any())
             <div class="alert-danger">
                 <strong>Opa!</strong> Algo deu errado:
@@ -116,7 +160,7 @@
 
         <!-- Formulário aponta para a rota 'disciplinas.store' (método POST) -->
         <form action="{{ route('disciplinas.store') }}" method="POST">
-            @csrf <!-- Token de segurança do Laravel (OBRIGATÓRIO) -->
+            @csrf 
 
             <div class="form-group">
                 <label for="nome">Nome da Disciplina:</label>
@@ -124,17 +168,31 @@
             </div>
 
             <div class="form-group">
-                <label for="carga_horaria">Carga Horária (em horas):</label>
-                <input type="number" id="carga_horaria" name="carga_horaria" value="{{ old('carga_horaria') }}" required min="1">
+                <label for="descricao">Descrição (Opcional):</label>
+                <textarea id="descricao" name="descricao" rows="3">{{ old('descricao') }}</textarea>
             </div>
 
             <div class="form-group">
-                <label for="valor_hora">Valor por Hora (R$):</label>
-                <input type="text" id="valor_hora" name="valor_hora" value="{{ old('valor_hora') }}" required>
+                <label for="preco_hora">Preço por Hora (R$):</label>
+                <!-- É importante usar type="number" para o preço, mas input type="text" para formatação/validação no Laravel -->
+                <input type="number" id="preco_hora" name="preco_hora" step="0.01" value="{{ old('preco_hora') }}" required>
             </div>
 
             <button type="submit" class="btn-submit"><i class="fas fa-save me-2"></i> SALVAR DISCIPLINA</button>
         </form>
     </div>
+
+    <!-- RODAPÉ ACADÊMICO FINAL (Sua Estrutura Detalhada) -->
+    <footer class="footer-academico">
+        <p>Desenvolvido por: <strong>Leandro Vasconcelos</strong> e <strong>Cristina Amaral</strong></p>
+        <p>Disciplina: Programação Orientada á Objeto | Profª: Luciene Soares</p>
+        <p>Curso Técnico de Informática | Colégio Santo Inácio | Rede Jesuíta de Educação
+            <img src="{{ asset('imagens/csi.png') }}" alt="Colégio Santo Inácio" class="csi-logo">
+        </p>
+        <p>Projeto Acadêmico | Sistema de Aulas Particulares | MVC Laravel 
+            <img src="{{ asset('imagens/laravel.png') }}" alt="Laravel Framework" class="laravel-logo">
+        </p>
+    </footer>
+
 </body>
 </html>
