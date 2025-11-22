@@ -45,7 +45,7 @@
         .table-custom td { color: var(--text-light); }
         .table-custom tr:hover td { background-color: #4b556333; } /* Hover sutil */
 
-        /* CORREÇÃO APLICADA AQUI: Garante que o conteúdo da célula de ações não quebre a linha e tenha largura mínima */
+        /* Garante que o conteúdo da célula de ações não quebre a linha */
         .table-custom .td-actions {
             white-space: nowrap;
             width: 200px; /* Garante que a coluna tenha espaço para os 3 botões */
@@ -64,7 +64,6 @@
             margin-left: 5px; 
             font-weight: bold; 
             border: none;
-            /* Detalhe de Interação: Efeito Hover */
             transition: all 0.2s ease;
         }
         .btn-action:hover {
@@ -107,12 +106,9 @@
     
     <div class="container-box">
         
-        <!-- Navegação Primária -->
+        <!-- Navegação Primária: APENAS LINK PARA DASHBOARD -->
         <div style="margin-bottom: 20px; padding-bottom: 10px;">
-            <a href="{{ route('dashboard') }}" class="nav-link">Dashboard</a>
-            <a href="{{ route('alunos.index') }}" class="nav-link active">Alunos</a>
-            <a href="{{ route('disciplinas.index') }}" class="nav-link">Disciplinas</a>
-            <a href="{{ route('aulas.index') }}" class="nav-link">Aulas</a>
+            <a href="{{ route('dashboard') }}" class="nav-link"><i class="fas fa-arrow-left"></i> VOLTAR AO DASHBOARD</a>
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
@@ -137,7 +133,6 @@
                         <tr>
                             <td>{{ $aluno->nome }}</td>
                             <td>{{ $aluno->email }}</td>
-                            <!-- APLICAÇÃO DA CLASSE DE CORREÇÃO -->
                             <td style="text-align: center;" class="td-actions"> 
                                 <a href="{{ route('alunos.show', $aluno->id) }}" class="btn-action btn-info"><i class="fas fa-eye"></i> Ver</a>
                                 <a href="{{ route('alunos.edit', $aluno->id) }}" class="btn-action btn-primary"><i class="fas fa-edit"></i> Editar</a>
