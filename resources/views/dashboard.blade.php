@@ -1,65 +1,51 @@
-<x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center text-white">
-            <h2 class="font-semibold text-xl leading-tight">
-                Dashboard Geral
-            </h2>
-            {{-- Botão Adicionar Novo --}}
-            <a href="#" class="px-4 py-2 bg-yellow-500 text-purple-900 font-bold rounded-lg shadow-md hover:bg-yellow-400 transition duration-300">
-                + Novo Registro
-            </a>
+{{-- resources/views/dashboard.blade.php --}}
+
+@extends('layouts.original')
+
+@section('title', 'Dashboard Geral')
+
+@section('content')
+
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1 style="color: var(--text-light); font-size: 1.8rem; margin-bottom: 0;">VISÃO GERAL DO SISTEMA</h1>
+        <a href="{{ route('alunos.create') }}" class="btn-action btn-create"><i class="fas fa-plus me-2"></i> NOVO REGISTRO</a>
+    </div>
+
+    {{-- Cards do Dashboard com o estilo DOURADO/AMARELO do seu tema --}}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        
+        {{-- Card Alunos --}}
+        <div class="col">
+            <div class="card-dashboard p-4" style="background-color: var(--accent-primary) !important;">
+                <div class="card-body p-0">
+                    <p class="text-sm opacity-90" style="color: var(--bg-card);">Total de</p>
+                    <h4 class="h4 font-weight-bold mt-1" style="color: var(--bg-card);">0 Alunos</h4>
+                    <a href="{{ route('alunos.index') }}" class="mt-3 btn btn-sm btn-dark w-100" style="background-color: var(--bg-card); color: var(--accent-primary); border: none;">Gerenciar</a>
+                </div>
+            </div>
         </div>
-    </x-slot>
+        
+        {{-- Card Disciplinas --}}
+        <div class="col">
+            <div class="card-dashboard p-4" style="background-color: var(--accent-primary) !important;">
+                <div class="card-body p-0">
+                    <p class="text-sm opacity-90" style="color: var(--bg-card);">Total de</p>
+                    <h4 class="h4 font-weight-bold mt-1" style="color: var(--bg-card);">0 Disciplinas</h4>
+                    <a href="{{ route('disciplinas.index') }}" class="mt-3 btn btn-sm btn-dark w-100" style="background-color: var(--bg-card); color: var(--accent-primary); border: none;">Gerenciar</a>
+                </div>
+            </div>
+        </div>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            {{-- Contêiner Principal: Fundo Roxo com Transparência --}}
-            <div class="bg-purple-900 bg-opacity-70 p-8 shadow-xl sm:rounded-xl">
-                <h3 class="text-2xl font-bold mb-6 text-white">Visão Geral dos Registros</h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-                    {{-- Card Alunos (Estilo Dourado/Amarelo) --}}
-                    <div class="flex flex-col p-6 bg-yellow-500 rounded-xl shadow-lg text-purple-900 justify-between">
-                        <div>
-                            <p class="text-sm opacity-90">Total de</p>
-                            <h4 class="text-4xl font-extrabold mt-1">{{ 0 }} Alunos</h4>
-                        </div>
-                        <div class="mt-4 space-y-2">
-                            <a href="{{ route('alunos.index') }}" class="block px-3 py-1 bg-purple-900 text-white hover:bg-purple-800 rounded-md text-sm text-center">
-                                Gerenciar Alunos
-                            </a>
-                        </div>
-                    </div>
-                    
-                    {{-- Card Disciplinas (Estilo Dourado/Amarelo) --}}
-                    <div class="flex flex-col p-6 bg-yellow-500 rounded-xl shadow-lg text-purple-900 justify-between">
-                        <div>
-                            <p class="text-sm opacity-90">Total de</p>
-                            <h4 class="text-4xl font-extrabold mt-1">{{ 0 }} Disciplinas</h4>
-                        </div>
-                        <div class="mt-4 space-y-2">
-                            <a href="{{ route('disciplinas.index') }}" class="block px-3 py-1 bg-purple-900 text-white hover:bg-purple-800 rounded-md text-sm text-center">
-                                Gerenciar Disciplinas
-                            </a>
-                        </div>
-                    </div>
-
-                    {{-- Card Aulas (Estilo Dourado/Amarelo) --}}
-                    <div class="flex flex-col p-6 bg-yellow-500 rounded-xl shadow-lg text-purple-900 justify-between">
-                        <div>
-                            <p class="text-sm opacity-90">Total de</p>
-                            <h4 class="text-4xl font-extrabold mt-1">{{ 0 }} Aulas</h4>
-                        </div>
-                        <div class="mt-4 space-y-2">
-                            <a href="{{ route('aulas.index') }}" class="block px-3 py-1 bg-purple-900 text-white hover:bg-purple-800 rounded-md text-sm text-center">
-                                Gerenciar Aulas
-                            </a>
-                        </div>
-                    </div>
-
+        {{-- Card Aulas --}}
+        <div class="col">
+            <div class="card-dashboard p-4" style="background-color: var(--accent-primary) !important;">
+                <div class="card-body p-0">
+                    <p class="text-sm opacity-90" style="color: var(--bg-card);">Total de</p>
+                    <h4 class="h4 font-weight-bold mt-1" style="color: var(--bg-card);">0 Aulas</h4>
+                    <a href="{{ route('aulas.index') }}" class="mt-3 btn btn-sm btn-dark w-100" style="background-color: var(--bg-card); color: var(--accent-primary); border: none;">Gerenciar</a>
                 </div>
             </div>
         </div>
     </div>
-</x-app-layout>
+
+@endsection
