@@ -4,22 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Aluno</title>
-    <!-- Estilo CSS autônomo -->
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background-color: #f4f4f4; }
-        .container { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        h1 { color: #333; border-bottom: 2px solid #007bff; padding-bottom: 10px; }
-        .detail-group { margin-bottom: 15px; }
-        .detail-group strong { display: block; color: #555; font-size: 0.9em; text-transform: uppercase; }
-        .detail-group span { font-size: 1.2em; color: #000; }
-        .link-back { display: inline-block; margin-top: 20px; text-decoration: none; color: #007bff; padding: 8px 12px; border: 1px solid #007bff; border-radius: 4px; }
-        .link-back:hover { background-color: #007bff; color: white; }
+        /* Variáveis de Dark Mode */
+        :root {
+            --bg-page: #1f2937;
+            --bg-card: #374151;
+            --text-light: #f3f4f6;
+            --accent-primary: #f59e0b; /* Dourado */
+            --accent-secondary: #2dd4bf; /* Ciano/Mint */
+            --accent-danger: #dc2626;
+            --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 0; 
+            background-color: var(--bg-page); 
+            padding: 40px;
+            color: var(--text-light);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+        }
+        .container-box { 
+            max-width: 600px; 
+            margin: auto;
+            background: var(--bg-card); 
+            padding: 30px; 
+            border-radius: 12px; 
+            box-shadow: var(--shadow); 
+            margin-bottom: 100px;
+        }
+        
+        /* Estilo para o cabeçalho com logo */
+        .header-logo {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #4b5563;
+        }
+        .header-logo img { height: 40px; width: auto; }
+        .header-logo h1 { margin: 0; padding: 0; border: none; font-size: 1.8rem; font-weight: 700; margin-left: 15px; }
+
+        /* Estilo dos Detalhes */
+        .detail-group { 
+            margin-bottom: 15px; 
+            border-left: 4px solid var(--accent-secondary); /* Destaque Secundário (Ciano) */
+            padding-left: 15px;
+            background-color: #4b556350; 
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .detail-group strong { display: block; color: var(--accent-primary); font-size: 0.9em; text-transform: uppercase; margin-bottom: 3px; }
+        .detail-group span { font-size: 1.1em; color: var(--text-light); }
+        
+        /* Links */
+        .link-back { 
+            display: inline-block; margin-top: 20px; text-decoration: none; color: #9ca3af; font-weight: 600;
+            padding: 8px 12px; border: 1px solid #9ca3af; border-radius: 4px;
+        }
+        .link-back:hover { color: var(--accent-secondary); border-color: var(--accent-secondary); }
+
+        /* Rodapé Acadêmico */
+        .footer-academico {
+            position: absolute; bottom: 0; left: 0; width: 100%; background-color: #27303d; color: #9ca3af; padding: 10px 0; font-size: 0.85rem; text-align: center; border-top: 1px solid #4b5563;
+        }
+        .footer-academico p { margin: 0; line-height: 1.4; }
+        .footer-academico strong { color: var(--accent-secondary); }
+        .footer-academico .laravel-logo, .footer-academico .csi-logo { height: 18px; vertical-align: middle; margin-left: 10px; }
+        .footer-academico .laravel-logo { filter: invert(100%); }
     </style>
 </head>
 <body>
-    <div class="container">
-        <!-- O $aluno->nome vem do compact('aluno') que fizemos no Controller -->
-        <h1>Detalhes do Aluno</h1>
+    <div class="container-box">
+        
+        <a href="{{ route('alunos.index') }}" class="link-back"><i class="fas fa-arrow-left me-2"></i> Voltar para a Lista de Alunos</a>
+
+        <!-- Cabeçalho com LOGO DO PROJETO (logo2.png) -->
+        <div class="header-logo">
+            <img src="{{ asset('imagens/logo2.png') }}" alt="Logo Aulas Particulares">
+            <h1>DETALHES DO ALUNO</h1>
+        </div>
 
         <div class="detail-group">
             <strong>Nome:</strong>
@@ -33,24 +103,36 @@
 
         <div class="detail-group">
             <strong>Telefone:</strong>
-            <!-- Se o telefone estiver vazio, mostra "Não cadastrado" -->
             <span>{{ $aluno->telefone ?? 'Não cadastrado' }}</span>
         </div>
         
-        <hr style="border: 0; border-top: 1px solid #eee; margin-top: 20px;">
+        <hr style="border: 0; border-top: 1px solid #4b5563; margin: 30px 0;">
 
+        <div class="detail-group">
+            <strong>ID do Aluno:</strong>
+            <span>{{ $aluno->id }}</span>
+        </div>
         <div class="detail-group">
             <strong>Criado em:</strong>
             <span>{{ $aluno->created_at->format('d/m/Y \à\s H:i') }}</span>
         </div>
-
         <div class="detail-group">
             <strong>Última Atualização:</strong>
             <span>{{ $aluno->updated_at->format('d/m/Y \à\s H:i') }}</span>
         </div>
 
-
-        <a href="{{ route('alunos.index') }}" class="link-back">Voltar para a Lista</a>
     </div>
+
+    <!-- Rodapé Acadêmico -->
+    <footer class="footer-academico">
+        <p>Desenvolvido por: <strong>Leandro Vasconcelos</strong> e <strong>Cristina Amaral</strong></p>
+        <p>Disciplina: Programação Orientada á Objeto | Profª: Luciene Soares</p>
+        <p>Curso Técnico de Informática | Colégio Santo Inácio | Rede Jesuíta de Educação
+            <img src="{{ asset('imagens/csi.png') }}" alt="Colégio Santo Inácio" class="csi-logo">
+        </p>
+        <p>Projeto Acadêmico | Sistema de Aulas Particulares | MVC Laravel 
+            <img src="{{ asset('imagens/laravel.png') }}" alt="Laravel Framework" class="laravel-logo">
+        </p>
+    </footer>
 </body>
 </html>

@@ -11,12 +11,12 @@
     <style>
         /* Variáveis de Dark Mode */
         :root {
-            --bg-page: #1f2937; /* Fundo Escuro */
-            --bg-card: #374151; /* Janela Central Escura */
+            --bg-page: #1f2937;
+            --bg-card: #374151;
             --text-light: #f3f4f6;
-            --accent-primary: #f59e0b; /* AMARELO DOURADO (ADICIONAR) */
-            --accent-secondary: #2dd4bf; /* CIANO/MINT */
-            --accent-danger: #dc2626; /* Vermelho */
+            --accent-primary: #f59e0b;
+            --accent-secondary: #2dd4bf;
+            --accent-danger: #dc2626;
             --shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
         }
         
@@ -39,29 +39,16 @@
             box-shadow: var(--shadow); 
             margin-bottom: 100px;
         }
-        
-        /* Estilo para o cabeçalho com logo */
-        .header-logo {
-            display: flex;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
+        h1 { 
+            color: var(--text-light); 
+            font-size: 1.8rem; 
+            margin-bottom: 20px; 
             border-bottom: 2px solid #4b5563;
-        }
-        .header-logo img {
-            height: 40px; 
-            width: auto;
-        }
-        .header-logo h1 {
-            margin: 0;
-            padding: 0;
-            border: none;
-            font-size: 1.8rem;
+            padding-bottom: 10px;
             font-weight: 700;
-            margin-left: 15px;
         }
         
-        /* Formulário e Botões */
+        /* Formulário */
         .form-group { margin-bottom: 15px; }
         .form-group label { display: block; margin-bottom: 8px; font-weight: bold; font-size: 0.95rem; }
         .form-group input, .form-group textarea { 
@@ -73,6 +60,8 @@
             background-color: #4b5563;
             color: var(--text-light);
         }
+        
+        /* Botão de Salvar */
         .btn-submit { 
             padding: 10px 20px; 
             background-color: var(--accent-primary); 
@@ -129,7 +118,6 @@
             vertical-align: middle; 
             margin-left: 10px;
         }
-        /* Corrigindo o brilho da logo do Laravel no Dark Mode */
         .footer-academico .laravel-logo {
              filter: invert(100%); 
         }
@@ -160,22 +148,23 @@
 
         <!-- Formulário aponta para a rota 'disciplinas.store' (método POST) -->
         <form action="{{ route('disciplinas.store') }}" method="POST">
-            @csrf 
+            @csrf <!-- Token de segurança OBRIGATÓRIO -->
 
             <div class="form-group">
                 <label for="nome">Nome da Disciplina:</label>
                 <input type="text" id="nome" name="nome" value="{{ old('nome') }}" required>
             </div>
 
+            {{-- CORREÇÃO AQUI: Name do campo deve ser 'carga_horaria' --}}
             <div class="form-group">
-                <label for="descricao">Descrição (Opcional):</label>
-                <textarea id="descricao" name="descricao" rows="3">{{ old('descricao') }}</textarea>
+                <label for="carga_horaria">Carga Horária (em horas):</label>
+                <input type="number" id="carga_horaria" name="carga_horaria" value="{{ old('carga_horaria') }}" required min="1">
             </div>
 
+            {{-- CORREÇÃO AQUI: Name do campo deve ser 'valor_hora' --}}
             <div class="form-group">
-                <label for="preco_hora">Preço por Hora (R$):</label>
-                <!-- É importante usar type="number" para o preço, mas input type="text" para formatação/validação no Laravel -->
-                <input type="number" id="preco_hora" name="preco_hora" step="0.01" value="{{ old('preco_hora') }}" required>
+                <label for="valor_hora">Valor por Hora (R$):</label>
+                <input type="text" id="valor_hora" name="valor_hora" value="{{ old('valor_hora') }}" required>
             </div>
 
             <button type="submit" class="btn-submit"><i class="fas fa-save me-2"></i> SALVAR DISCIPLINA</button>
@@ -193,6 +182,5 @@
             <img src="{{ asset('imagens/laravel.png') }}" alt="Laravel Framework" class="laravel-logo">
         </p>
     </footer>
-
 </body>
 </html>
