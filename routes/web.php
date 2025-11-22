@@ -17,4 +17,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+// ... Rotas de Login e Dashboard aqui...
+
 require __DIR__.'/auth.php';
+
+// ROTAS PROTEGIDAS PARA O CRUD (SOMENTE USUÁRIOS LOGADOS)
+Route::middleware('auth')->group(function () {
+    
+    // Rotas de Alunos (index, create, store, show, edit, update, destroy)
+    Route::resource('alunos', App\Http\Controllers\AlunoController::class);
+
+    // Rotas de Disciplinas
+    Route::resource('disciplinas', App\Http\Controllers\DisciplinaController::class);
+
+    // Rotas de Aulas
+    Route::resource('aulas', App\Http\Controllers\AulaController::class);
+    
+});
